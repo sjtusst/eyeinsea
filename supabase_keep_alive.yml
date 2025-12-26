@@ -1,0 +1,28 @@
+name: Supabase Anti-Pause Bot
+
+on:
+  schedule:
+    # 每天北京时间凌晨随机运行（这里设定 UTC 18:00，约北京时间凌晨 2 点触发任务）
+    - cron: '0 18 * * *'
+  workflow_dispatch: # 允许你随时手动点击按钮运行
+
+jobs:
+  keep_alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Random Delay and Request
+        run: |
+          # 生成 1 到 43200 秒之间的随机数（即 0 到 12 小时）
+          # 这样可以确保每天访问的时间点完全不同
+          SLEEP_TIME=$(( RANDOM % 43200 ))
+          echo "为了模拟真实行为，将随机等待 $SLEEP_TIME 秒后发起请求..."
+          sleep $SLEEP_TIME
+          
+          echo "开始访问数据库..."
+          curl -X GET "${{ https://dluwpfopgqczoblxmtwk.supabase.co }}/rest/v1/${{public.users }}?select=*" \
+          -L \
+          -H "apikey: ${{ sb_publishable_BGxJs-nfiDh0oRzHtZehig_nL0FJxdZ }}" \
+          -H "Authorization: Bearer ${{ sb_publishable_BGxJs-nfiDh0oRzHtZehig_nL0FJxdZ }}" \
+          -H "Range: 0-0"
+          
+          echo "任务完成！心跳包已发送。"
