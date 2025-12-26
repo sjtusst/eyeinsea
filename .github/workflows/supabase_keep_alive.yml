@@ -1,4 +1,4 @@
-name: .github/workflows/Supabase Anti-Pause Bot
+name: Supabase Anti-Pause Bot
 
 on:
   schedule:
