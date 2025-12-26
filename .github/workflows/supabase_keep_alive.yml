@@ -2,9 +2,9 @@ name: Supabase Anti-Pause Bot
 
 on:
   schedule:
-    # 每天北京时间凌晨随机运行（这里设定 UTC 18:00，约北京时间凌晨 2 点触发任务）
-    - cron: '0 18 * * *'
-  workflow_dispatch: # 允许你随时手动点击按钮运行
+    # 修改这里：每隔两天的 UTC 18:00 (北京时间凌晨 2:00) 触发
+    - cron: '0 18 */2 * *'
+  workflow_dispatch: # 保持不变，允许手动触发
 
 jobs:
   keep_alive:
@@ -12,14 +12,14 @@ jobs:
     steps:
       - name: Random Delay and Request
         run: |
-          # 生成 1 到 43200 秒之间的随机数（即 0 到 12 小时）
-          # 这样可以确保每天访问的时间点完全不同
-          SLEEP_TIME=$(( RANDOM % 43200 ))
+          # 随机等待 1 到 21600 秒（即 0 到 6 小时）
+          # 既能打乱规律，又不会让脚本运行时间过长
+          SLEEP_TIME=$(( RANDOM % 21600 ))
           echo "为了模拟真实行为，将随机等待 $SLEEP_TIME 秒后发起请求..."
           sleep $SLEEP_TIME
           
           echo "开始访问数据库..."
-          curl -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/${{ secrets.TABLE_NAME }}?select=*" \
+          curl -i -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/${{ secrets.TABLE_NAME }}?select=*" \
           -L \
           -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
           -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
