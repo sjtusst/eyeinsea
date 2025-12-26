@@ -19,10 +19,10 @@ jobs:
           sleep $SLEEP_TIME
           
           echo "开始访问数据库..."
-          curl -X GET "${{ https://dluwpfopgqczoblxmtwk.supabase.co }}/rest/v1/${{public.users }}?select=*" \
+          curl -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/${{ secrets.TABLE_NAME }}?select=*" \
           -L \
-          -H "apikey: ${{ sb_publishable_BGxJs-nfiDh0oRzHtZehig_nL0FJxdZ }}" \
-          -H "Authorization: Bearer ${{ sb_publishable_BGxJs-nfiDh0oRzHtZehig_nL0FJxdZ }}" \
+          -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
           -H "Range: 0-0"
           
           echo "任务完成！心跳包已发送。"
